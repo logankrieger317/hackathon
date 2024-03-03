@@ -14,12 +14,13 @@ async function search(req, res) {
         console.log('Plant search controller hit')
         const inOut = req.query.indoor
         // grab user Id from req
-        const userId = req.user._id
+        const user = req.user._id
         console.log(userId)
         // use userID to get user's location
-        const userZip = userId.location
+        const userZip = user.location
         console.log(userZip)
         // pass the location into Hardiness API
+        //TODO: ADD LOGIC TO CHECK IF user.hardiness is not null
         //TODO: setup API call with correct url
         const hardiness = await axios.get('api url here', userZip);
         // pass Hardiness number and any optional parameters into PlantAPI

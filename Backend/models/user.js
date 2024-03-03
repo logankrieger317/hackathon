@@ -9,7 +9,8 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Favorite'
     }],
-    location: Number
+    location: Number,
+    hardiness: Number
 })
 
 // TODO: unccomment
