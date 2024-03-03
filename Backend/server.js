@@ -5,6 +5,8 @@ const cors = require('cors')
 const session = require('express-session')
 const logger = require('morgan')
 
+const plantsRouter = require('./routes/plants')
+
 const app = express()
 
 // TODO: uncomment once db setup
@@ -21,7 +23,7 @@ app.use(session({
 }));
 
 //Routes:
-
+app.use('/', plantsRouter)
 
 
 app.listen(3001, () => {
