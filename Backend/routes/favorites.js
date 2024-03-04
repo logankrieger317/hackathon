@@ -12,6 +12,6 @@ router.get('/', favoritesCtrlr.index)
 router.post('/add', favoritesCtrlr.add)
 
 // Router to unfavorite
-router.delete('/remove', favoritesCtrlr.unfavorite)
+router.delete('/unfavorite', favoritesCtrlr.unfavorite)
 
 module.exports = router;
