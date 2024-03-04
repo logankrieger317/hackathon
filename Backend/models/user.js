@@ -5,6 +5,7 @@ const Favorite = require('./favorites');
 
 const userSchema = new Schema({
     name: String,
+    email: String,
     favorites: [{
         type: Schema.Types.ObjectId,
         ref: 'Favorite'

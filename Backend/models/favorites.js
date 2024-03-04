@@ -6,7 +6,7 @@ const favoritesSchema = new Schema({
     cycle: String,
     watering: String,
     sunlight: String,
-    hardiness: String,
+    hardiness: Number,
     maintenance: String,
     indoor: Boolean,
     description: String,

@@ -12,6 +12,7 @@ module.exports = {
 // Takes in userId and any optional filters from req.body
 // Optional: indoor/outdoor, Maybe: poison, edible, sunlight, watering
 
+//TODO: Add ability to search by plant name
 async function search(req, res) {
     try {
         console.log(`req.body is: ${req.body}`)

@@ -1,37 +1,46 @@
 const User = require('../models/user');
-// TODO: import favorites model here
+const Favorite = require('../models/favorites');
 
-// module.exports = {
-//     index,
-//     add,
-//     unfavorite
-// }
+module.exports = {
+    index,
+    add,
+    unfavorite
+}
 
-// //Shows all of a user's favorite plants
-// async function index(req, res) {
-//     console.log('Index favs controller hit')
-//     try {
+//Shows all of a user's favorite plants
+async function index(req, res) {
+    console.log('Index favs controller hit')
+    try {
         
-//     } catch (err) {
+    } catch (err) {
         
-//     }
-// }
+    }
+}
 
 
-// async function add(req, res) {
-//     console.log('add favorite controller hit')
-//     try {
+async function add(req, res) {
+    const userId = req.body.userId
+    try {
+        const newFavorite = new Favorite(req.body)
+        const savedFavorite = await newFavorite.save()
 
-//     } catch (err) {
+        const user = await User.findById(userId)
+        user.favorites.push(savedFavorite)
+        await user.save()
 
-//     }
-// }
+        return res.status(200).json({message: "Object favorited successfully!"})
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Failed to Favorite"})
+    }
+}
 
-// async function unfavorite(req, res) {
-//     console.log('unfavorite controller hit')
-//     try {
+async function unfavorite(req, res) {
+    console.log('unfavorite controller hit')
+    try {
 
-//     } catch (err) {
-
-//     }
-// }
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Failed to Unfavorite"})
+    }
+}
