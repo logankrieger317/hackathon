@@ -2,8 +2,17 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const favoritesSchema = new Schema({
-    // TODO: Find out what details should be shown
+    plantName: String,
+    cycle: String,
+    watering: String,
+    sunlight: String,
+    hardiness: String,
+    maintenance: String,
+    indoor: Boolean,
+    description: String,
+    pruningInfo: String,
+    wateringInfo: String,
+    sunlightInfo: String
 })
 
-// TODO: unccomment
-// module.exports = mongoose.model('Favorites', favoritesSchema);
+module.exports = mongoose.model('Favorites', favoritesSchema);

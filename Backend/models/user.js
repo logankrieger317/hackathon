@@ -13,5 +13,4 @@ const userSchema = new Schema({
     hardiness: Number
 })
 
-// TODO: unccomment
-// module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

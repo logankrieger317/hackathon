@@ -10,3 +10,5 @@ router.get('/search', plantsCtrlr.search)
 
 // Router to get plant details
 router.get('/details', plantsCtrlr.details)
+
+module.exports = router;

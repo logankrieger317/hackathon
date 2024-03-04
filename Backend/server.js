@@ -10,8 +10,15 @@ const favoritesRouter = require('./routes/favorites')
 
 const app = express()
 
-// TODO: uncomment once db setup
-// mongoose.connect(process.env.DATABASE_URL)
+mongoose .connect(process.env.DATABASE_URL)   
+.then(() => console.log("Connected to Mongo Server!"))
+.catch(err => console.log(err));
+
+const db = mongoose.connection;
+	
+db.on('connected', function() {
+  console.log(`Connected to MongoDB ${db.name} at ${db.host}:${db.port}`);
+});
 
 
 app.use(logger('dev'));
@@ -19,6 +26,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use(session({
+    secret: 'my-random-express-session-secret',
     resave: false,
     saveUninitialized: false
 }));
