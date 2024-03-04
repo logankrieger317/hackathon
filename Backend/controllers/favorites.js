@@ -56,17 +56,25 @@ async function add(req, res) {
     }
 }
 
+// Send userId and plantId in request body
 async function unfavorite(req, res) {
-    console.log('unfavorite controller hit')
+    console.log('unfavorite controller hit');
     try {
-        // {favPlantId} = req.body
-        // {userId} = req.body
-        // user = await User.findbyId(userId)
-        // await user.save()
-        // Remove this plant from user.favorites
-        // plantToRemove = await Favorites.findbyIdandDelete(favPlantId)
+        const { plantId, userId } = req.body;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        // Remove the plant from user's favorites
+        console.log(`users favs ${user.favorites}`)
+        user.favorites.pull(plantId);
+        await user.save();
+        console.log(`users new favs ${user.favorites}`)
+        // Delete the plant from mongo database
+        await Favorite.findByIdAndDelete(plantId);
+        return res.status(200).json({ message: "Plant unfavorited successfully" });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ message: "Failed to Unfavorite"})
+        return res.status(500).json({ message: "Failed to unfavorite" });
     }
 }
