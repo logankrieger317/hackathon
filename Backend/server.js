@@ -7,6 +7,7 @@ const logger = require('morgan')
 
 const plantsRouter = require('./routes/plants')
 const favoritesRouter = require('./routes/favorites')
+const userRouter = require('./routes/user')
 
 const app = express()
 
@@ -34,6 +35,7 @@ app.use(session({
 //Routes:
 app.use('/plants', plantsRouter)
 app.use('/favorites', favoritesRouter)
+app.use('/user', userRouter)
 
 
 app.listen(3001, () => {
