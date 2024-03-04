@@ -4,7 +4,7 @@ const router = express.Router();
 const userCtrlr = require('../controllers/user')
 
 
-module.exports = router;
+// Prepended with /user
 
 //Sign Up
 router.post('/signup', userCtrlr.signup)

@@ -11,7 +11,10 @@ module.exports = {
 async function index(req, res) {
     console.log('Index favs controller hit')
     try {
-        
+        // pull the userId
+        // findbyId
+        // get user.favorites
+        // send that array to frontend
     } catch (err) {
         
     }
@@ -38,7 +41,12 @@ async function add(req, res) {
 async function unfavorite(req, res) {
     console.log('unfavorite controller hit')
     try {
-
+        // {favPlantId} = req.body
+        // {userId} = req.body
+        // user = await User.findbyId(userId)
+        // await user.save()
+        // Remove this plant from user.favorites
+        // plantToRemove = await Favorites.findbyIdandDelete(favPlantId)
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "Failed to Unfavorite"})
