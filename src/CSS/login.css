@@ -38,3 +38,11 @@ img{
     justify-content: space-around;
 }
 
+.btn{
+    background-color: #43b39b;
+    color: white;
+}
+
+.btn:hover{
+    background-color:#E2B049
+}
