@@ -68,21 +68,43 @@ async function index(req, res) {
 // Either plant details according to schema are passed into the body or (once updated) the plantID is in the body
 
 async function add(req, res) {
-    const userId = req.body.userId
+    const idToken = req.body.idToken;
     try {
-        const newFavorite = new Favorite(req.body)
-        const savedFavorite = await newFavorite.save()
-        const user = await User.findById(userId)
-        user.favorites.push(savedFavorite)
-        await user.save()
-        return res.status(200).json({message: "Object favorited successfully!"})
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        const userUID = decodedToken.uid;
+        const user = await User.findOne({ uid: userUID });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        const newFavorite = new Favorite(req.body);
+        const savedFavorite = await newFavorite.save();
+        user.favorites.push(savedFavorite);
+        await user.save();
+        return res.status(200).json({ message: "Object favorited successfully!" });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ message: "Failed to Favorite"})
+        return res.status(500).json({ message: "Failed to Favorite" });
     }
 }
 
+
+// async function add(req, res) {
+//     const userId = req.body.userId
+//     try {
+//         const newFavorite = new Favorite(req.body)
+//         const savedFavorite = await newFavorite.save()
+//         const user = await User.findById(userId)
+//         user.favorites.push(savedFavorite)
+//         await user.save()
+//         return res.status(200).json({message: "Object favorited successfully!"})
+//     } catch (err) {
+//         console.error(err);
+//         return res.status(500).json({ message: "Failed to Favorite"})
+//     }
+// }
+
 // Send userId and plantId in request body
+
 async function unfavorite(req, res) {
     try {
         const { plantId, userId } = req.body;
