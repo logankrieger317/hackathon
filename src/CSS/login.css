@@ -1,12 +1,40 @@
-.container{
-    background-color: black;
-    height:100vh
-}
-
 .main{
-    background-image: url('../images/login.jpeg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/login.jpeg');
     background-size: cover;
     background-position: center;
-    height: 66vh;
+
+}
+
+form{
+    display: flex;
+    flex-direction: column;
     
 }
+
+.logo-container{
+    background-image:url('../images/GreenLogo.png');
+    background-size:contain;
+    background-repeat: no-repeat;
+    height: 100px;
+    margin: 15%;
+    margin-left: 25%;
+    
+}
+
+.social-Icons{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10%;
+    padding:10px;
+}
+
+img{
+    height: 30px;
+}
+
+.webLink{
+    display: flex;
+    justify-content: space-around;
+}
+

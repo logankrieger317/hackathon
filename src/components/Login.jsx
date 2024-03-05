@@ -7,10 +7,10 @@ function Login() {
   const [showSignup, setShowSignup] = useState(false);
 
   return (
-
+    
     <div className="flex items-center justify-center h-screen main" >
       <div className="w-full max-w-lg ">
-        <h2 className="text-3xl font-bold text-center"></h2>
+        {/* <h2 className="text-3xl font-bold text-center"></h2> */}
         
         {showSignup ? (
           <SignupForm />  
@@ -50,22 +50,24 @@ console.log(formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    try {
-        const { data } = await axios.post('/api/login', formData) 
-    } catch (err){
-        console.error(err)
-    }
+    // try {
+    //     const { data } = await axios.post('/api/login', formData) 
+    // } catch (err){
+    //     console.error(err)
+    // }
   }
 
 
 
   return (
+    <>
+
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
-    <img src="../images/Group10.jpeg"></img>
+    <div className="logo-container "></div>
       <input 
         type="text"
         name="username"
-        placeholder="Username"
+        placeholder="E-mail address"
         value={formData.username}
         onChange={handleChange}
         className="w-full p-2 mb-4 border rounded" 
@@ -86,7 +88,27 @@ console.log(formData);
       >
         Login
       </button>
+      <div className="social-Icons">
+        <a href="https://www.facebook.com/">
+          <img src="https://cdn1.iconfinder.com/data/icons/social-media-circle-7/512/Circled_Facebook_svg-512.png" alt="Facebook" />
+        </a>
+
+        <a href="https://www.instagram.com/">
+          <img src="https://cdn1.iconfinder.com/data/icons/social-media-circle-7/512/Circled_Instagram_svg-512.png" alt="Instagram" />
+        </a>
+
+        <a href="https://twitter.com/">
+          <img src="https://cdn3.iconfinder.com/data/icons/social-media-black-white-2/512/BW_Twitter_glyph_svg-512.png" alt="Twitter" /> 
+        </a>
+
+        <a href="mailto:info@example.com">
+          <img src="https://cdn4.iconfinder.com/data/icons/social-media-and-logos-12/32/Logo_Gmail_envelope_letter_email-512.png" alt="Email" />
+        </a>
+      </div>
+        <p className="webLink"> www.urbanbloom.com</p>
     </form>
+    
+    </>
   )
 }
 
@@ -128,7 +150,9 @@ function SignupForm() {
 console.log(formData);
 
   return (
+    <>
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
+    <div className="logo-container "></div>
       <input
         type="text"
         name="firstName"
@@ -198,7 +222,26 @@ console.log(formData);
       >
         Sign Up
       </button>
+      <div className="social-Icons">
+        <a href="https://www.facebook.com/">
+          <img src="https://cdn1.iconfinder.com/data/icons/social-media-circle-7/512/Circled_Facebook_svg-512.png" alt="Facebook" />
+        </a>
+
+        <a href="https://www.instagram.com/">
+          <img src="https://cdn1.iconfinder.com/data/icons/social-media-circle-7/512/Circled_Instagram_svg-512.png" alt="Instagram" />
+        </a>
+
+        <a href="https://twitter.com/">
+          <img src="https://cdn3.iconfinder.com/data/icons/social-media-black-white-2/512/BW_Twitter_glyph_svg-512.png" alt="Twitter" /> 
+        </a>
+
+        <a href="mailto:info@example.com">
+          <img src="https://cdn4.iconfinder.com/data/icons/social-media-and-logos-12/32/Logo_Gmail_envelope_letter_email-512.png" alt="Email" />
+        </a>
+      </div>
+        <p className="webLink"> www.urbanbloom.com</p>
     </form>
+    </>
   )
 }
 
