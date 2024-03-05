@@ -9,9 +9,8 @@ const userCtrlr = require('../controllers/user')
 //Sign Up
 router.post('/signup', userCtrlr.signup)
 
-//Login
-// router.get('/login', userCtrlr.login)
+// Edit Profile
+router.patch('/edit', userCtrlr.editProfile);
 
-//Logout
 
 module.exports = router;

@@ -10,67 +10,81 @@ module.exports = {
 
 
 // Returns list of plants based on search parameters
-// Takes in userId and any optional filters from req.body
+// Takes in firebaseToken & zip code. and any optional filters from req.body
 // Optional: indoor/outdoor, Maybe: poison, edible, sunlight, watering
 
 //TODO: Add ability to search by plant name
 async function search(req, res) {
     try {
-        console.log(`req.body is: ${req.body}`)
-        let inOut = null
-        if (req.body.indoor) {
-            const inOut = req.body.indoor
-            console.log(`inOut is ${inOut}`)
+        const firebaseToken = req.body.firebaseToken;
+        let location = req.body.location;
+
+        const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
+        const userUID = decodedToken.uid;
+
+        const user = await User.findOne({ uid: userUID });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
         }
-        // grab user Id from req.body
-        const userId = req.body.userId
-        console.log(`user id is ${userId}`)
-        // use userID to get user's location
-        const user = await User.findById(userId)
-        console.log(`user object is ${user}`)
-        const userZip = user.location
-        console.log(userZip)
-        
-        // convert ZIP to hardiness zone number
+
+        let tempHardiness = null
+        if (location && !user.location) {
+            // if user doesnt have a location yet, we create it here
+            await User.findOneAndUpdate({ uid: userUID }, { location: location });
+        } else if (location != user.location) {
+            // if user has a location but is searching plants in a different location
+            tempHardiness = await getHardiness(location)
+        }
+
+        // Convert ZIP to hardiness zone number
         if (!user.hardiness) {
             const hardiness = await getHardiness(userZip)
             console.log(`users hardiness score is ${hardiness}`)
-            await User.findByIdAndUpdate(userId, { hardiness: hardiness });
+            await User.findOneAndUpdate({ uid: userUID }, { hardiness: hardiness });
             console.log(`user with hardiness is ${user}`)
         } else {
             console.log('User already has hardiness number')
         }
+        
+        let page = 1
+        let apiUrl = `https://perenual.com/api/species-list?key=${process.env.PLANT_API_KEY}&page=${page}`;
 
-        let apiUrl = `https://perenual.com/api/species-list?key=${process.env.PLANT_API_KEY}&page=1&hardiness=${user.hardiness}`;
-        console.log(`api url: ${apiUrl}`)
+        // If tempHardiness is not null, use it; otherwise, use user's hardiness
+        const hardinessToUse = tempHardiness !== null ? tempHardiness : user.hardiness;
+        apiUrl += `&hardiness=${hardinessToUse}`;
+                
 
+        // Check if indoor/outdoor/both
+        const inOut = req.body.indoor;
+        
         //TODO: Write helper function to handle filtered searching
-        // check if indoor/outdoor/both
+        // if (filter1 || water || poisio) {
+        // addFilterstoApiUrl()
+        // }
+        
         if (inOut === 1) {
-            apiUrl += '&indoor=1'
+            apiUrl += `&indoor=${inOut}`;
         } else if (inOut === 0) {
-            apiUrl += '&indoor=0'
-        } else {
-            // if neither indoor or outdoor are selected by user,all indoor&outdoor plants are searched for
+            // if outdoor is selected, we start the search at page 70 to avoid trees
+            page = 70
+            apiUrl += `&indoor=${inOut}`;
         }
 
-        const plantList = await axios.get(apiUrl)
-        console.log(`plantList: ${plantList}`)
-        // send that response to the frontend
-        res.json(plantList.data)
-        
+        const plantList = await axios.get(apiUrl);
+        res.json(plantList.data);
     } catch (err) {
         console.error('Problem at controllers/plants.js search function', err);
-        res.status(500).json({ err: 'Problem at controllers/plants.js search function' });
+        res.status(500).json({ error: 'Problem at controllers/plants.js search function' });
     }
 }
+
 
 // Shows plant details when user clicks on a plant
 // Required: plant's id
 async function details(req, res) {
     console.log('Plant details controller hit')
     try {
-        const plantId = req.query.plantId
+        const plantId = req.params.plantId
         console.log(`plantId is: ${plantId}`)
         const plantDetails = await axios.get(`https://perenual.com/api/species/details/${plantId}?key=${process.env.PLANT_API_KEY}`);
         console.log(`plantDetails is: ${plantDetails.data}`)
@@ -83,8 +97,10 @@ async function details(req, res) {
 }
 
 
-// response.dimensions.max_value
 
+
+
+// TODO: Delete this function
 async function shortPlants(req, res) {
     try {
         // Set empty array to store plant list
@@ -129,18 +145,3 @@ async function shortPlants(req, res) {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
-
-// async function shortPlants (req, res) {
-//     try {
-//         // set empty array
-//         // api call for plant list
-//         // store that list in the empty array above
-//         // init another empty array const shortPlants = []
-//         // loop thru each plant in the list and pull out its id
-//             // put that id in a api call for plant details
-//             // if that plants height is <= 4 feet push this into shortPlants array
-//         // send shortPlants as json response
-//     } catch (err) {
-
-//     }
-// }
