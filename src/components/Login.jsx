@@ -1,3 +1,4 @@
+import "../CSS/login.css"
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -6,9 +7,10 @@ function Login() {
   const [showSignup, setShowSignup] = useState(false);
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center">Login</h2>
+
+    <div className="flex items-center justify-center h-screen main" >
+      <div className="w-full max-w-lg ">
+        <h2 className="text-3xl font-bold text-center"></h2>
         
         {showSignup ? (
           <SignupForm />  
@@ -18,11 +20,12 @@ function Login() {
 
         <div className="text-center mt-4">
           <button
-            className="text-blue-500 hover:underline"
+            className="text-green-500 hover:underline"
             onClick={() => setShowSignup(!showSignup)}
           >
             {showSignup ? 'Already have an account? Login' : "Don't have an account? Sign up"}
           </button>
+        
         </div>
       </div>
     </div>
@@ -58,6 +61,7 @@ console.log(formData);
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
+    <img src="../images/Group10.jpeg"></img>
       <input 
         type="text"
         name="username"
@@ -78,7 +82,7 @@ console.log(formData);
 
       <button
         type="submit"
-        className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+        className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600"
       >
         Login
       </button>
@@ -118,7 +122,7 @@ function SignupForm() {
     console.log(response.data); 
 
   } catch (err) {
-    // Handle error  
+    console.log(err);
   }
 }
 console.log(formData);
@@ -190,7 +194,7 @@ console.log(formData);
 
       <button
         type="submit"
-        className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"  
+        className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"  
       >
         Sign Up
       </button>
