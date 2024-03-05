@@ -10,9 +10,9 @@ module.exports = {
 
 async function signup(req, res) {
     try {
-        const { idToken } = req.body;
+        const { firebaseToken } = req.body;
         console.log(`uid is: ${uid}`)
-        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
         console.log(`decodedToken is: ${decodedToken}`)
         const { name, email } = decodedToken;
         const foundEmail = await User.findOne({ email: email})

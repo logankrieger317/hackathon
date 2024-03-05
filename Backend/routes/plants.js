@@ -9,7 +9,7 @@ const plantsCtrlr = require('../controllers/plants')
 router.get('/search', plantsCtrlr.search)
 
 // Router to get plant details
-router.get('/details', plantsCtrlr.details)
+router.get('/details/:plantId', plantsCtrlr.details)
 
 router.get('/short', plantsCtrlr.shortPlants)
 
