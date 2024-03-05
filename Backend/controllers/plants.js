@@ -4,7 +4,8 @@ const { getHardiness } = require('../helperFunctions');
 
 module.exports = {
     search,
-    details
+    details,
+    shortPlants
 }
 
 
@@ -71,7 +72,6 @@ async function details(req, res) {
     try {
         const plantId = req.query.plantId
         console.log(`plantId is: ${plantId}`)
-        // const plantDetails = await axios.get(`https://perenual.com/api/plant-details?id=${plantId}&key=${process.env.PLANT_API_KEY}`);
         const plantDetails = await axios.get(`https://perenual.com/api/species/details/${plantId}?key=${process.env.PLANT_API_KEY}`);
         console.log(`plantDetails is: ${plantDetails.data}`)
         //TODO: ADD A CALL FOR PLANT CARE INFO
@@ -81,3 +81,66 @@ async function details(req, res) {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+
+// response.dimensions.max_value
+
+async function shortPlants(req, res) {
+    try {
+        // Set empty array to store plant list
+        const plantList = [];
+
+        // API call to fetch the plant list
+        const plantListResponse = await axios.get(`https://perenual.com/api/species-list?key=${process.env.PLANT_API_KEY}&page=1&indoor=0`);
+
+        // Store the list of plants in the empty array
+        plantList.push(...plantListResponse.data.data);
+
+        // Initialize another empty array to store short plants
+        const shortPlants = [];
+
+        let counter = 1
+        // Loop through each plant in the list
+        for (const plant of plantList) {
+            // Extract the plant's ID
+            const plantId = plant.id;
+
+            // API call to fetch plant details by ID
+            const plantDetailsResponse = await axios.get(`https://perenual.com/api/species/details/${plantId}?key=${process.env.PLANT_API_KEY}`);
+            counter += 1
+            console.log(plantDetailsResponse)
+
+            // Extract the plant's height from the details
+            // TODO: review this line
+            const plantHeight = parseFloat(plantDetailsResponse.data.dimensions.max_value);
+
+            // Check if the plant's height is less than or equal to 4 feet
+            if (plantHeight <= 4) {
+                // If so, push the plant into the shortPlants array
+                shortPlants.push(plant);
+            }
+        }
+        console.log(shortPlants)
+        console.log(`COUNTER::: ${counter}`)
+        // Send shortPlants array as JSON response
+        res.json(shortPlants);
+    } catch (err) {
+        console.error('Error fetching short plants:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+// async function shortPlants (req, res) {
+//     try {
+//         // set empty array
+//         // api call for plant list
+//         // store that list in the empty array above
+//         // init another empty array const shortPlants = []
+//         // loop thru each plant in the list and pull out its id
+//             // put that id in a api call for plant details
+//             // if that plants height is <= 4 feet push this into shortPlants array
+//         // send shortPlants as json response
+//     } catch (err) {
+
+//     }
+// }

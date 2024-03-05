@@ -10,7 +10,7 @@ const userCtrlr = require('../controllers/user')
 router.post('/signup', userCtrlr.signup)
 
 //Login
-router.get('/login', userCtrlr.login)
+// router.get('/login', userCtrlr.login)
 
 //Logout
 

@@ -10,7 +10,6 @@ module.exports = {
 // Shows all of a user's favorite plants
 // Pass userId in request body
 async function index(req, res) {
-    console.log('Index favs controller hit')
     try {
         // pull the userId
         const {userId} = req.body
@@ -38,17 +37,17 @@ async function index(req, res) {
     }
 }
 
-
+// TODO: update this so that if all the info is not in the body (i.e. user favoriting from list view), 
+// TODO: then the plantID is used to make an api call for the details and that is used to populate the favorites schema
+// Either plant details according to schema are passed into the body or (once updated) the plantID is in the body
 async function add(req, res) {
     const userId = req.body.userId
     try {
         const newFavorite = new Favorite(req.body)
         const savedFavorite = await newFavorite.save()
-
         const user = await User.findById(userId)
         user.favorites.push(savedFavorite)
         await user.save()
-
         return res.status(200).json({message: "Object favorited successfully!"})
     } catch (err) {
         console.error(err);
@@ -58,7 +57,6 @@ async function add(req, res) {
 
 // Send userId and plantId in request body
 async function unfavorite(req, res) {
-    console.log('unfavorite controller hit');
     try {
         const { plantId, userId } = req.body;
         const user = await User.findById(userId);
@@ -66,10 +64,8 @@ async function unfavorite(req, res) {
             return res.status(404).json({ error: "User not found" });
         }
         // Remove the plant from user's favorites
-        console.log(`users favs ${user.favorites}`)
         user.favorites.pull(plantId);
         await user.save();
-        console.log(`users new favs ${user.favorites}`)
         // Delete the plant from mongo database
         await Favorite.findByIdAndDelete(plantId);
         return res.status(200).json({ message: "Plant unfavorited successfully" });

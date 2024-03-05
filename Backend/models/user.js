@@ -7,6 +7,7 @@ const userSchema = new Schema({
     name: String,
     email: String,
     password: String,
+    uid: String,
     favorites: [{
         type: Schema.Types.ObjectId,
         ref: 'Favorite'
