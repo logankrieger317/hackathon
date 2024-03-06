@@ -9,14 +9,14 @@ module.exports = {
 
 async function signup(req, res) {
     try {
-        const { username, email, password } = req.body;
+        const { name, email, password } = req.body;
         // check if the user already exists in the database
         const foundEmail = await User.findOne({ email: email });
         if (foundEmail) {
             return res.status(422).json({ error: "Email Already Exists" });
         }
         const newUser = new User({
-            username,
+            name,
             email,
             password // Note: Remember to hash the password before saving it in a real-world scenario
         });
@@ -68,22 +68,31 @@ async function editProfile(req, res) {
         // const userUID = decodedToken.uid;
         // const user = await User.findOne({ uid: userUID });
 
-        const { email, name, location } = req.body;
+        const { oldEmail, email, name, location, password } = req.body;
 
-        // find user by email
-        const user = await User.findOne({ email: email });
+        // find user by old email
+        const user = await User.findOne({ email: oldEmail });
 
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-        if (name) {
-            await User.findOneAndUpdate({ uid: userUID }, { name: name });
+
+        if (email && email !== oldEmail) {
+            const emailExists = await User.findOne({ email: email });
+            if (emailExists) {
+                return res.status(409).json({ error: "Email already in use" });
+            }
+            await User.findOneAndUpdate({ email: oldEmail }, { email: email });
         }
-        if (email) {
-            await User.findOneAndUpdate({ uid: userUID }, { email: email });
+
+        if (name) {
+            await User.findOneAndUpdate({ email: email }, { name: name });
         }
         if (location) {
-            await User.findOneAndUpdate({ uid: userUID }, { location: location });
+            await User.findOneAndUpdate({ email: email }, { location: location });
+        }
+        if (password) {
+            await User.findOneAndUpdate({ email: email }, { password: password });
         }
 
         await user.save();
