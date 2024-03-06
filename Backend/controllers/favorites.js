@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const { Favorite, favoritesSchema } = require('../models/favorites');
 const admin = require('firebase-admin');
+const axios = require('axios')
 
 module.exports = {
     index,
@@ -9,7 +10,7 @@ module.exports = {
 }
 
 // Shows all of a user's favorite plants
-// Pass userId in request body
+// Pass user email in request body
 async function index(req, res) {
     try {
         // const firebaseToken = req.body.firebaseToken;
@@ -39,11 +40,9 @@ async function index(req, res) {
 
 // REQUIRED: Either plant details according to schema are passed into the body or the plantID is in the body
 async function add(req, res) {
-    const firebaseToken = req.body.firebaseToken;
+    const userEmail = req.body.email;
     try {
-        const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
-        const userUID = decodedToken.uid;
-        const user = await User.findOne({ uid: userUID });
+        const user = await User.findOne({ email: userEmail });
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
@@ -61,27 +60,30 @@ async function add(req, res) {
                 common_name,
                 cycle,
                 watering,
-                sunlight,
+                sunlight, //array
                 hardiness,
                 maintenance,
                 indoor,
                 description,
-                pruningInfo,
-                wateringInfo,
-                sunlightInfo
+                // pruningInfo,
+                // wateringInfo,
+                // sunlightInfo
             } = plantDetails.data;
+
+            const formattedSunlight = sunlight.join(', '); // converts it from an Array to a string
+        
             const newFavorite = new Favorite({
                 plantName: common_name,
                 cycle,
                 watering,
-                sunlight,
+                sunlight: formattedSunlight,
                 hardiness: hardiness.min, // Assuming you want to save only the minimum hardiness
                 maintenance,
                 indoor,
                 description,
-                pruningInfo,
-                wateringInfo,
-                sunlightInfo
+                // pruningInfo,
+                // wateringInfo,
+                // sunlightInfo
             });
             const savedFavorite = await newFavorite.save();
             user.favorites.push(savedFavorite);
