@@ -17,21 +17,20 @@ async function search(req, res) {
     try {
         const userEmail = req.body.email;
         let location = req.body.location;
-
-        if (!location) {
-            return res.status(404).json({ error: "Please Select a Location" });
-        }
-        // find user by email
         const user = await User.findOne({ email: userEmail });
+        // find user by email
         if (!user) {
             return res.status(404).json({ error: "User not found" });
+        }
+        if (!location && !user.location) {
+            return res.status(400).json({ error: "Please Select a Location" });
         }
 
         let tempHardiness = null;
         if (!user.location) {
             // if user doesn't have a location yet, we create it here
             await User.findOneAndUpdate({ email: userEmail }, { location: location });
-        } else if (location !== user.location) {
+        } else if (location && location !== user.location) {
             // if user has a location but is searching plants in a different location
             tempHardiness = await getHardiness(location);
         }
@@ -41,7 +40,6 @@ async function search(req, res) {
             const hardiness = await getHardiness(userZip);
             await User.findOneAndUpdate({ email: userEmail }, { hardiness: hardiness });
         } else {
-            console.log('User already has a hardiness number');
         }
         
         let page = 1;
