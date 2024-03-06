@@ -10,6 +10,7 @@ import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
 import EnergySavingsLeafOutlinedIcon from '@mui/icons-material/EnergySavingsLeafOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import '../CSS/footer.css'
 
 export default function Footer() {
   const [value, setValue] = React.useState(0);
@@ -25,11 +26,11 @@ export default function Footer() {
           setValue(newValue);
         }}
       >
-        <BottomNavigationAction label="Locations" icon={<LanguageOutlinedIcon />} />
-        <BottomNavigationAction label="Plants" icon={<EnergySavingsLeafOutlinedIcon />} />
-        <BottomNavigationAction label="My Profile" icon={<AccountCircleOutlinedIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteBorderOutlinedIcon />} />
-        <BottomNavigationAction label="Settings" icon={<SettingsOutlinedIcon />} />
+        <BottomNavigationAction className='footer-icons' label="Locations" icon={<LanguageOutlinedIcon />} />
+        <BottomNavigationAction className='footer-icons' label="Plants" icon={<EnergySavingsLeafOutlinedIcon />} />
+        <BottomNavigationAction className='footer-icons' label="My Profile" icon={<AccountCircleOutlinedIcon />} />
+        <BottomNavigationAction className='footer-icons' label="Favorites" icon={<FavoriteBorderOutlinedIcon />} />
+        <BottomNavigationAction className='footer-icons' label="Settings" icon={<SettingsOutlinedIcon />} />
       </BottomNavigation>
     </Box>
     </div>

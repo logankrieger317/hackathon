@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import '../CSS/infoButton.css'
 
 export default function ClickAway() {
   const [open, setOpen] = React.useState(false);
@@ -25,9 +26,11 @@ export default function ClickAway() {
   };
 
   return (
+    <>
+    <div className='info-button'>
     <ClickAwayListener onClickAway={handleClickAway}>
       <Box sx={{ position: 'relative' }}>
-        <button type="button" onClick={handleClick}>
+        <button className='green-button ' type="button" onClick={handleClick}>
           i
         </button>
         {open ? (
@@ -37,5 +40,7 @@ export default function ClickAway() {
         ) : null}
       </Box>
     </ClickAwayListener>
+    </div>
+    </>
   );
 }
