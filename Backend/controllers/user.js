@@ -29,39 +29,6 @@ async function signup(req, res) {
     }
 }
 
-
-// async function signup(req, res) {
-//     try {
-//         const { firebaseToken } = req.body;
-//         console.log(`firebaseToken is: ${firebaseToken}`)
-//         const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
-//         console.log(`decodedToken is: ${decodedToken}`)
-        
-//         const { name, email, password } = decodedToken; //TODO: if this info is being sent in req.body , replace decodedToken with req.body. And add logic to make sure req.body.password === user.password
-//         const foundEmail = await User.findOne({ email: email})
-//         if (foundEmail) {
-//             return res.status(422).json({ error: "Email Already Exists" });
-//         }
-//         const userExists = await User.findOne({ uid: decodedToken.uid });
-//         if (userExists) {
-//             return res.status(422).json({ error: "User Already Exists" });
-//         } else {
-//             // Save user to mongodb
-//             const newUser = new User({
-//                 name,
-//                 email,
-//                 password,
-//                 uid: decodedToken.uid
-//             });
-//             await newUser.save();
-//             res.status(201).json({ message: 'User Successfully Registered!' });
-//         }
-//     } catch (err) {
-//         console.error(`Signup Error: ${err.message}`);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//     }
-// }
-
 async function editProfile(req, res) {
     try {
         // const { firebaseToken, name, email, location } = req.body;
@@ -121,3 +88,42 @@ async function login(req, res) {
         res.status(500).json({ error: "Internal server error" });
     }
 }
+
+
+
+
+
+
+
+
+// async function signup(req, res) {
+//     try {
+//         const { firebaseToken } = req.body;
+//         console.log(`firebaseToken is: ${firebaseToken}`)
+//         const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
+//         console.log(`decodedToken is: ${decodedToken}`)
+        
+//         const { name, email, password } = decodedToken; //TODO: if this info is being sent in req.body , replace decodedToken with req.body. And add logic to make sure req.body.password === user.password
+//         const foundEmail = await User.findOne({ email: email})
+//         if (foundEmail) {
+//             return res.status(422).json({ error: "Email Already Exists" });
+//         }
+//         const userExists = await User.findOne({ uid: decodedToken.uid });
+//         if (userExists) {
+//             return res.status(422).json({ error: "User Already Exists" });
+//         } else {
+//             // Save user to mongodb
+//             const newUser = new User({
+//                 name,
+//                 email,
+//                 password,
+//                 uid: decodedToken.uid
+//             });
+//             await newUser.save();
+//             res.status(201).json({ message: 'User Successfully Registered!' });
+//         }
+//     } catch (err) {
+//         console.error(`Signup Error: ${err.message}`);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// }
