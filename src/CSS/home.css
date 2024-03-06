@@ -1,0 +1,23 @@
+.home{
+    background-color: #E3E1DB;
+}
+
+.mapCont{
+    background-image: url('../images/USA-map-outline.png');
+    height: 35vh ;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.dropdown{
+    width: 60vw;
+    margin-left: 10vw;
+}
+
+.above-map-text{
+    color: black;
+    background-color: white;
+    width: 60vw;
+    margin-top: 15px;
+    margin-left:20vw;
+}

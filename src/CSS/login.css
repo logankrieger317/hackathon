@@ -33,10 +33,6 @@ img{
     height: 30px;
 }
 
-.webLink{
-    display: flex;
-    justify-content: space-around;
-}
 
 .btn{
     background-color: #43b39b;
