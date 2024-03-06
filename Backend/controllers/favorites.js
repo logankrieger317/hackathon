@@ -12,10 +12,12 @@ module.exports = {
 // Pass userId in request body
 async function index(req, res) {
     try {
-        const firebaseToken = req.body.firebaseToken;
-        const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
-        const userUID = decodedToken.uid;
-        const user = await User.findOne({ uid: userUID});
+        // const firebaseToken = req.body.firebaseToken;
+        // const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
+        // const userUID = decodedToken.uid;
+        // const user = await User.findOne({ uid: userUID});
+        const userEmail = req.body.email;
+        const user = await User.findOne({ email: userEmail });
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
