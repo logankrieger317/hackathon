@@ -16,13 +16,16 @@ export default function ClickAway() {
 
   const styles = {
     position: 'absolute',
-    top: 28,
+    top: -500,
     right: 0,
-    left: 0,
-    zIndex: 1,
-    border: '1px solid',
+    left: -250,
+    width: 300,
+    height: 500,
+    zIndex: 5,
     p: 1,
     bgcolor: 'background.paper',
+    borderRadius: '10px',
+    boxShadow: '12px 12px 150px 25px rgba(0, 0, 0, 0.5)',
   };
 
   return (
