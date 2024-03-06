@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const favoritesSchema = new Schema({
     plantName: String,
+    plantId: Number,
     cycle: String,
     watering: String,
     sunlight: String,

@@ -103,13 +103,11 @@ async function add(req, res) {
     }
 }
 
-
+// Takes in user's email and plant's object ID (in request body)
 async function unfavorite(req, res) {
-    const firebaseToken = req.body.firebaseToken;
+    const userEmail = req.body.email;
     try {
-        const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
-        const userUID = decodedToken.uid;
-        const user = await User.findOne({ uid: userUID });
+        const user = await User.findOne({ email: userEmail });
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
