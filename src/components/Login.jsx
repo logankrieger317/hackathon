@@ -105,7 +105,7 @@ console.log(formData);
           <img src="https://cdn4.iconfinder.com/data/icons/social-media-and-logos-12/32/Logo_Gmail_envelope_letter_email-512.png" alt="Email" />
         </a>
       </div>
-        <p className="webLink flex justify-center mt-3"> www.urbanbloom.com</p>
+        <p className="webLink flex justify-center mt-3"> https://urbanbloom.surge.sh</p>
     </form>
     
     </>
@@ -240,7 +240,7 @@ console.log(formData);
           <img src="https://cdn4.iconfinder.com/data/icons/social-media-and-logos-12/32/Logo_Gmail_envelope_letter_email-512.png" alt="Email" />
         </a>
         </div>
-        <p className="webLink flex justify-center mt-3"> www.urbanbloom.com</p>
+        <p className="webLink flex justify-center mt-3"> htts://urbanbloom.surge.sh</p>
     </form>
       </div>
     </>

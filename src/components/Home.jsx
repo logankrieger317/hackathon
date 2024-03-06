@@ -21,16 +21,18 @@ function Home() {
       </Typography>
       </div>
           <div className="mapCont">
-             <img src={mapImage} alt="Map" style={{width: '100%', height: 'auto'}} />
+             <img id='map' src={mapImage} alt="Map" style={{width: '100%', height: 'auto'}} />
            </div>
       
       <div className='below-map-text'>
         <Typography variant="body1">
-      Please pick the available city closest to you. If your city is not listed, rest assured there are more coming.
+      Click on the information icon to learn more about Plant Hardiness Zones and how they affect your garden.
       </Typography>
 
-      <InfoPop />
-      
+      </div>
+
+      <div className='flex w-screen justify-end mr-28'>
+      <InfoPop className='float-right'/>
       </div>
     </div>
    

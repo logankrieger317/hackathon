@@ -5,16 +5,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* border: 10px solid yellow; */
     margin-bottom: 10px;
     
+    height: 73vh;
 }
-
-.dropdown{
-    margin-top: 10px;
-    width: 70vw;
-}
-
 
 .above-map-text, .below-map-text{
     display: flex;
@@ -27,7 +21,7 @@
     margin-top: 15px;
     margin-bottom: 10px;
     border-radius: 10px;
-
+        
 }
 
 

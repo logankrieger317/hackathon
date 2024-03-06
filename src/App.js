@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Home from './components/Home';
 import Login from './components/Login';
 import './App.css';
@@ -8,15 +8,17 @@ import Locations from './components/Locations';
 import Profile from './components/Profile';
 import Favorites from './components/Favorites';
 import Settings from './components/Settings';
+import Header from './components/Header';
 
 
 
 function App() {
-
- 
+  const location = useLocation();
+  console.log(location);
 
   return (
     <div className='App'>
+    {location.pathname !== "/login" && <Header />}
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/locations" element={<Locations />} />
