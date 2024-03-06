@@ -9,6 +9,8 @@ import Profile from './components/Profile';
 import Favorites from './components/Favorites';
 import Settings from './components/Settings';
 import Header from './components/Header';
+import { UserProvider } from './components/UserContext';
+
 
 
 
@@ -17,20 +19,20 @@ function App() {
   console.log(location);
 
   return (
-    <div className='App'>
-    {location.pathname !== "/login" && <Header />}
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/locations" element={<Locations />} />
-      <Route path="/plants" element={<Plants/>} />
-      <Route path="/profile" element={<Profile/>} />
-      <Route path="/favorites" element={<Favorites/>} />
-      <Route path="/settings" element={<Settings />} />
-      <Route path="/" element={<Home />} />
-    </Routes>
-
-   
-    </div>
+    <UserProvider>
+      <div className='App'>
+      {location.pathname !== "/login" && <Header />}
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/locations" element={<Locations />} />
+          <Route path="/plants" element={<Plants/>} />
+          <Route path="/profile" element={<Profile/>} />
+          <Route path="/favorites" element={<Favorites/>} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </div>
+    </UserProvider>
   );
 }
 

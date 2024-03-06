@@ -19,7 +19,7 @@ async function signup(req, res) {
         const newUser = new User({
             name,
             email,
-            password // Note: Remember to hash the password before saving it in a real-world scenario
+            password
         });
         await newUser.save();
         res.status(201).json({ message: 'User Successfully Registered!' });
@@ -72,6 +72,7 @@ async function editProfile(req, res) {
     }
 }
 
+//pass users email and password in request body
 async function login(req, res) {
     try {
         const { email, password } = req.body;

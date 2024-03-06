@@ -1,5 +1,7 @@
 import "../CSS/login.css"
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from './UserContext';
 import axios from 'axios';
 
 function Login() {
@@ -33,28 +35,35 @@ function Login() {
 }
 
 function LoginForm() {
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
+
+  const { setUserEmail } = useUser();
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
-};
-console.log(formData);
+  };
+  console.log(formData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // try {
-    //     const { data } = await axios.post('/api/login', formData) 
-    // } catch (err){
-    //     console.error(err)
-    // }
+    try {
+        const response = await axios.post('http://localhost:3001/user/login', formData)
+        // after successfull api call, store the user's email in state
+        const email = response.data.user.email
+        setUserEmail(email)
+        // redirect the user to the homepage
+        navigate('/')
+    } catch (err){
+        console.error(err)
+    }
   }
 
 
@@ -66,9 +75,9 @@ console.log(formData);
     <div className="logo-container "></div>
       <input 
         type="text"
-        name="username"
+        name="email"
         placeholder="E-mail address"
-        value={formData.username}
+        value={formData.email}
         onChange={handleChange}
         className="w-full p-2 mb-4 border rounded" 
       />
@@ -113,19 +122,27 @@ console.log(formData);
 }
 
 function SignupForm() {
+  const navigate = useNavigate();
+  const { setUserEmail } = useUser();
 
   // State for form data
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
-    password: '',
-    city: '',
-    state: '',
-    zipCode: '' 
+    password: ''
   });
+  // const [formData, setFormData] = useState({
+  //   firstName: '',
+  //   lastName: '',
+  //   email: '',
+  //   password: '',
+  //   city: '',
+  //   state: '',
+  //   zipCode: '' 
+  // });
 
   // Handle input change
+  
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -138,11 +155,12 @@ function SignupForm() {
   e.preventDefault();
 
   try {
-    const response = await axios.post('/api/users', formData);
-    
-    // User created successfully
-    console.log(response.data); 
-
+    const response = await axios.post('http://localhost:3001/user/signup', formData);
+    console.log('response signup:', response.data);
+    const email = response.data.email
+    setUserEmail(email)
+    // redirect the user to the homepage
+    navigate('/')
   } catch (err) {
     console.log(err);
   }
@@ -154,20 +172,12 @@ console.log(formData);
     <div>
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
     <div className="logo-container "></div>
-      <input
-        type="text"
-        name="firstName"
-        placeholder="First Name"
-        value={formData.firstName}
-        onChange={handleChange}
-        className="w-full p-2 mb-4 border rounded"
-      />
 
       <input
         type="text" 
-        name="lastName"
-        placeholder="Last Name"
-        value={formData.lastName}
+        name="name"
+        placeholder="Name"
+        value={formData.name}
         onChange={handleChange}
         className="w-full p-2 mb-4 border rounded"
       />
@@ -186,33 +196,6 @@ console.log(formData);
         name="password"
         placeholder="Password"
         value={formData.password}
-        onChange={handleChange}
-        className="w-full p-2 mb-4 border rounded"
-      />
-
-      <input
-        type="text"
-        name="city"
-        placeholder="City"
-        value={formData.city}
-        onChange={handleChange}
-        className="w-full p-2 mb-4 border rounded"
-      />
-
-      <input
-        type="text"
-        name="state"
-        placeholder="State"
-        value={formData.state}
-        onChange={handleChange}
-        className="w-full p-2 mb-4 border rounded"
-      />
-
-      <input
-        type="text"
-        name="zipCode"
-        placeholder="Zip Code"
-        value={formData.zipCode}
         onChange={handleChange}
         className="w-full p-2 mb-4 border rounded"
       />
