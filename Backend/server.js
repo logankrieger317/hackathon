@@ -11,7 +11,9 @@ const userRouter = require('./routes/user')
 
 const app = express()
 
-mongoose .connect(process.env.DATABASE_URL)   
+require('./firebaseConfig')
+
+mongoose.connect(process.env.DATABASE_URL)   
 .then(() => console.log("Connected to Mongo Server!"))
 .catch(err => console.log(err));
 

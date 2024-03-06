@@ -47,7 +47,8 @@ async function add(req, res) {
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-        const newFavorite = new Favorite(req.body);
+        //TODO: Add conditional to check if plant details were sent in the body. If not, send an api call to {{base_url}}/api/species/details/{plantId}?key={apiKey}
+        const newFavorite = new Favorite(req.body); //This assumes they are favoriting from the detail page where frontend will have access to the needed plant details
         const savedFavorite = await newFavorite.save();
         user.favorites.push(savedFavorite);
         await user.save();
