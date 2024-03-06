@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const Favorite = require('../models/favorites');
+const { Favorite, favoritesSchema } = require('../models/favorites');
 const admin = require('firebase-admin');
 
 module.exports = {
@@ -10,7 +10,6 @@ module.exports = {
 
 // Shows all of a user's favorite plants
 // Pass userId in request body
-
 async function index(req, res) {
     try {
         const firebaseToken = req.body.firebaseToken;
@@ -35,9 +34,8 @@ async function index(req, res) {
 }
 
 
-// TODO: update this so that if all the info is not in the body (i.e. user favoriting from list view), 
-// TODO: then the plantID is used to make an api call for the details and that is used to populate the favorites schema
-// Either plant details according to schema are passed into the body or (once updated) the plantID is in the body
+
+// REQUIRED: Either plant details according to schema are passed into the body or the plantID is in the body
 async function add(req, res) {
     const firebaseToken = req.body.firebaseToken;
     try {
@@ -47,8 +45,50 @@ async function add(req, res) {
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-        //TODO: Add conditional to check if plant details were sent in the body. If not, send an api call to {{base_url}}/api/species/details/{plantId}?key={apiKey}
-        const newFavorite = new Favorite(req.body); //This assumes they are favoriting from the detail page where frontend will have access to the needed plant details
+
+        // checks to see if req.body includes the plant details
+        const reqBodyKeys = Object.keys(req.body)
+        const favSchemaKeys = Object.keys(favoritesSchema.obj)
+        const hasSchemaKeys = favSchemaKeys.every(key => reqBodyKeys.includes(key)) 
+
+        // if plant details not sent in req, then use the plantId that was sent in the request & make an API call to store the data
+        if (!hasSchemaKeys) {
+            const plantId = req.body.plantId;
+            const plantDetails = await axios.get(`https://perenual.com/api/species/details/${plantId}?key=${process.env.PLANT_API_KEY}`);
+            const {
+                common_name,
+                cycle,
+                watering,
+                sunlight,
+                hardiness,
+                maintenance,
+                indoor,
+                description,
+                pruningInfo,
+                wateringInfo,
+                sunlightInfo
+            } = plantDetails.data;
+            const newFavorite = new Favorite({
+                plantName: common_name,
+                cycle,
+                watering,
+                sunlight,
+                hardiness: hardiness.min, // Assuming you want to save only the minimum hardiness
+                maintenance,
+                indoor,
+                description,
+                pruningInfo,
+                wateringInfo,
+                sunlightInfo
+            });
+            const savedFavorite = await newFavorite.save();
+            user.favorites.push(savedFavorite);
+            await user.save();
+            return res.status(200).json({ message: "Object favorited successfully!" });
+        }
+
+        //This assumes they are favoriting from the detail page where frontend will have access to the needed plant details
+        const newFavorite = new Favorite(req.body); 
         const savedFavorite = await newFavorite.save();
         user.favorites.push(savedFavorite);
         await user.save();

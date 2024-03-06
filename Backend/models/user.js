@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Favorite = require('./favorites');
+const { Favorite } = require('../models/favorites');
 
 const userSchema = new Schema({
     name: String,

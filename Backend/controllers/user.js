@@ -13,6 +13,7 @@ async function signup(req, res) {
         console.log(`firebaseToken is: ${firebaseToken}`)
         const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
         console.log(`decodedToken is: ${decodedToken}`)
+        
         const { name, email, password } = decodedToken; //TODO: if this info is being sent in req.body , replace decodedToken with req.body. And add logic to make sure req.body.password === user.password
         const foundEmail = await User.findOne({ email: email})
         if (foundEmail) {
