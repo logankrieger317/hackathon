@@ -10,63 +10,55 @@ module.exports = {
 
 
 // Returns list of plants based on search parameters
-// Takes in firebaseToken & zip code. and any optional filters from req.body
-// Optional: indoor/outdoor, Maybe: poison, edible, sunlight, watering
+// Takes in user's email & zip code
 
 //TODO: Add ability to search by plant name
 async function search(req, res) {
     try {
-        const firebaseToken = req.body.firebaseToken;
+        const userEmail = req.body.email;
         let location = req.body.location;
 
-        const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
-        const userUID = decodedToken.uid;
-
-        const user = await User.findOne({ uid: userUID });
+        if (!location) {
+            return res.status(404).json({ error: "Please Select a Location" });
+        }
+        // find user by email
+        const user = await User.findOne({ email: userEmail });
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
 
-        let tempHardiness = null
-        if (location && !user.location) {
-            // if user doesnt have a location yet, we create it here
-            await User.findOneAndUpdate({ uid: userUID }, { location: location });
-        } else if (location != user.location) {
+        let tempHardiness = null;
+        if (!user.location) {
+            // if user doesn't have a location yet, we create it here
+            await User.findOneAndUpdate({ email: userEmail }, { location: location });
+        } else if (location !== user.location) {
             // if user has a location but is searching plants in a different location
-            tempHardiness = await getHardiness(location)
+            tempHardiness = await getHardiness(location);
         }
 
-        // Convert ZIP to hardiness zone number
+        // Convert ZIP to hardiness zone number if user doesn't have one
         if (!user.hardiness) {
-            const hardiness = await getHardiness(userZip)
-            console.log(`users hardiness score is ${hardiness}`)
-            await User.findOneAndUpdate({ uid: userUID }, { hardiness: hardiness });
-            console.log(`user with hardiness is ${user}`)
+            const hardiness = await getHardiness(userZip);
+            await User.findOneAndUpdate({ email: userEmail }, { hardiness: hardiness });
         } else {
-            console.log('User already has hardiness number')
+            console.log('User already has a hardiness number');
         }
         
-        let page = 1
+        let page = 1;
         let apiUrl = `https://perenual.com/api/species-list?key=${process.env.PLANT_API_KEY}&page=${page}`;
 
-        // If tempHardiness is not null, use it; otherwise, use user's hardiness
+        // If tempHardiness is not null, use it. otherwise, use user's hardiness
         const hardinessToUse = tempHardiness !== null ? tempHardiness : user.hardiness;
         apiUrl += `&hardiness=${hardinessToUse}`;
                 
-
         // Check if indoor/outdoor/both
         const inOut = req.body.indoor;
-        
-        //TODO: Write helper function to handle filtered searching
-        // if (filter1 || water || poisio) {
-        // addFilterstoApiUrl()
-        // }
         
         if (inOut === 1) {
             apiUrl += `&indoor=${inOut}`;
         } else if (inOut === 0) {
-            // if outdoor is selected, we start the search at page 70 to avoid trees
-            page = 70
+            // If outdoor is selected, we start the search at page 70 to avoid trees
+            page = 70;
             apiUrl += `&indoor=${inOut}`;
         }
 
@@ -77,6 +69,7 @@ async function search(req, res) {
         res.status(500).json({ error: 'Problem at controllers/plants.js search function' });
     }
 }
+
 
 
 // Shows plant details when user clicks on a plant
