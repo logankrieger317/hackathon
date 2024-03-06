@@ -3,7 +3,8 @@ const admin = require('firebase-admin');
 
 module.exports = {
     signup,
-    editProfile
+    editProfile,
+    login
 }
 
 
@@ -100,6 +101,23 @@ async function editProfile(req, res) {
         res.status(200).json({ message: "Profile updated successfully" });
     } catch (err) {
         console.error("Error editing user profile:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+async function login(req, res) {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            return res.status(404).json({ error: "Email not found" });
+        }
+        if (user.password !== password) {
+            return res.status(401).json({ error: "Incorrect password" });
+        }
+        res.status(200).json({ message: "Login successful", user: user });
+    } catch (err) {
+        console.error("Error logging in:", err);
         res.status(500).json({ error: "Internal server error" });
     }
 }
