@@ -62,7 +62,7 @@ console.log(formData);
   return (
     <>
 
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
+    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow m-4">
     <div className="logo-container "></div>
       <input 
         type="text"
@@ -105,7 +105,7 @@ console.log(formData);
           <img src="https://cdn4.iconfinder.com/data/icons/social-media-and-logos-12/32/Logo_Gmail_envelope_letter_email-512.png" alt="Email" />
         </a>
       </div>
-        <p className="webLink"> www.urbanbloom.com</p>
+        <p className="webLink flex justify-center mt-3"> www.urbanbloom.com</p>
     </form>
     
     </>
@@ -151,6 +151,7 @@ console.log(formData);
 
   return (
     <>
+    <div>
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
     <div className="logo-container "></div>
       <input
@@ -238,9 +239,10 @@ console.log(formData);
         <a href="mailto:info@example.com">
           <img src="https://cdn4.iconfinder.com/data/icons/social-media-and-logos-12/32/Logo_Gmail_envelope_letter_email-512.png" alt="Email" />
         </a>
-      </div>
-        <p className="webLink"> www.urbanbloom.com</p>
+        </div>
+        <p className="webLink flex justify-center mt-3"> www.urbanbloom.com</p>
     </form>
+      </div>
     </>
   )
 }

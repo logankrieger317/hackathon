@@ -5,30 +5,10 @@ import Login from './components/Login';
 
 function App() {
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-  }
-
-  const handleSignup = () => {
-    setIsAuthenticated(true);
-  }
+ 
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route 
-          path="/" 
-          element={isAuthenticated ? <Home /> : <Navigate to="/login" />} 
-        />
-
-        <Route 
-          path="/login"
-          element={<Login onLogin={handleLogin} onSignup={handleSignup} />} 
-        />
-      </Routes>
-    </BrowserRouter>
+    <Home/>
   );
 }
 
