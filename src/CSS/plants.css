@@ -1,0 +1,11 @@
+.plantBtn{
+    background-color: white;
+}
+
+.plantBtn::after{
+    background-color: #e2b049;
+}
+
+.plantBtn:hover{
+    background-color: #e2b049;
+}
