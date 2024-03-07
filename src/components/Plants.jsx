@@ -146,9 +146,10 @@ function Plants() {
       
         {plants.map((plant) => (
         <Box key={plant.id} className='flex max-w-md items-start space-x-4 m-4 p-4 bg-white shadow-xl rounded-lg relative' onClick={() => handleClick(plant)}>
-          <img className='w-24 h-24 object-cover rounded' src={plant.imageUrl} alt='Plant' />
-          <div className='space-y-2 flex-grow flex-shrink min-w-0'>
-            <h2 className='text-xl font-semibold'>{plant.name}</h2>
+    {plant.default_image && plant.default_image.small_url && (
+      <img className='w-24 h-24 object-cover rounded' src={plant.default_image.small_url} alt='Plant' />
+    )}          <div className='space-y-2 flex-grow flex-shrink min-w-0'>
+            <h2 className='text-xl font-semibold'>{plant.common_name}</h2>
             <p className='text-gray-500 overflow-hidden overflow-ellipsis whitespace-nowrap'>{plant.description}</p>
           </div>
           <IconButton className='absolute top-2 right-2 ' aria-label="add to favorites" onClick={(event) => handleFavorite(event, plant.id)}>
