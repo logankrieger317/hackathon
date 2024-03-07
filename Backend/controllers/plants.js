@@ -16,9 +16,16 @@ module.exports = {
 async function search(req, res) {
     try {
         if (req.query.q) {
-            const nameToSearchBy = req.query.q
-            const plantList = await axios.get(`https://perenual.com/api/species-list?key=${process.env.PLANT_API_KEY}&q=${nameToSearchBy}`)
-            res.json(plantList.data);
+            const nameToSearchBy = req.query.q;
+            const plantList = await axios.get(`https://perenual.com/api/species-list?key=${process.env.PLANT_API_KEY}&q=${nameToSearchBy}`);
+        
+            if (plantList.data.length === 0) {
+                // If no plants are found, return a custom error message
+                return res.status(404).json({ error: "No plants found matching the search query" });
+            } else {
+                // If plants are found, return the list
+                res.json(plantList.data);
+            }
         }
         const userEmail = req.query.email;
         let city = req.query.location;

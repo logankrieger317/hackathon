@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import {useNavigate, useLocation} from 'react-router-dom';
+import TextField from '@mui/material/TextField';
 import { useUser } from './UserContext';
 import '../CSS/plants.css'
 
@@ -13,6 +14,8 @@ function Plants() {
   let location = useLocation();
   const [inOut, setInOut] = useState(null)
   const [plants, setPlants] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [favoritedPlants, setFavoritedPlants] = useState([]);
   const { userEmail } = useUser();
   console.log(`user email in plants component: ${userEmail}`)
   const city = location.state.selectedCity;
@@ -95,16 +98,37 @@ function Plants() {
     setInOut(0);
   };
 
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/plants/search?q=${searchTerm}`);
+      setPlants(response.data.data);
+    } catch (error) {
+      console.error('Failed to fetch plants:', error);
+    }
+  };
+
   function handleFavorite(event, plantId) {
     event.stopPropagation();
     axios.post('http://localhost:3001/favorites/add', { plantId: plantId, email: userEmail })
       .then(response => {
         console.log('Plant added to favorites:', response.data.message);
+        setFavoritedPlants(prevState => [...prevState, plantId]); // Update favorited plants state
       })
       .catch(error => {
         console.error('Error adding plant to favorites:', error);
       });
   }
+
+  // function handleFavorite(event, plantId) {
+  //   event.stopPropagation();
+  //   axios.post('http://localhost:3001/favorites/add', { plantId: plantId, email: userEmail })
+  //     .then(response => {
+  //       console.log('Plant added to favorites:', response.data.message);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error adding plant to favorites:', error);
+  //     });
+  // }
 
   useEffect(() => {
     const params = {
@@ -131,11 +155,22 @@ function Plants() {
     <>
     <div className='Plants' style={{ backgroundColor: '#cdc9c4', padding:'10px' }} >
     <Box className='header-box m-4 p-4 flex items-center justify-center flex-col'>
-    <h5 className='text-md font-bold text-center mb-2'>Plants for:</h5>
-    <div className='w-full border-b-2 text-2xl font-extrabold border-black mx-auto'>
-        <h5 className='text-xl text-center mb-2'>{city}</h5>
-    </div>
-</Box>
+      <h5 className='text-md font-bold text-center mb-2'>Plants for:</h5>
+      <div className='w-full border-b-2 text-2xl font-extrabold border-black mx-auto'>
+          <h5 className='text-xl text-center mb-2'>{city}</h5>
+      </div>
+    </Box>
+
+    <div className='search-box flex justify-center m-4'>
+          <TextField
+            id="search-term"
+            label="Search plant"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <Button variant="contained" onClick={handleSearch}>Search</Button>
+        </div>
   
     
       <div className='button-group flex justify-between items-center m-4'>
@@ -150,10 +185,12 @@ function Plants() {
       <img className='w-24 h-24 object-cover rounded' src={plant.default_image.small_url} alt='Plant' />
     )}          <div className='space-y-2 flex-grow flex-shrink min-w-0'>
             <h2 className='text-xl font-semibold'>{plant.common_name}</h2>
-            <p className='text-gray-500 overflow-hidden overflow-ellipsis whitespace-nowrap'>{plant.description}</p>
+            <p className='text-gray-500 overflow-hidden overflow-ellipsis whitespace-nowrap'>Cycle: {plant.cycle}</p>
+            <p className='text-gray-500 overflow-hidden overflow-ellipsis whitespace-nowrap'>Watering: {plant.watering}</p>
+            <p className='text-gray-500 overflow-hidden overflow-ellipsis whitespace-nowrap'>Sunlight: {plant.sunlight}</p>
           </div>
           <IconButton className='absolute top-2 right-2 ' aria-label="add to favorites" onClick={(event) => handleFavorite(event, plant.id)}>
-            <FavoriteBorderIcon fontSize="large" />
+            <FavoriteBorderIcon fontSize="large" style={{ color: favoritedPlants.includes(plant.id) ? 'red' : 'inherit' }} /> {/* Added style for changing color */}
           </IconButton>
         </Box>
       ))}
