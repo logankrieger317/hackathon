@@ -40,6 +40,7 @@ async function index(req, res) {
 
 // REQUIRED: Either plant details according to schema are passed into the body or the plantID is in the body
 async function add(req, res) {
+    console.log('req.body: ', req.body)
     const userEmail = req.body.email;
     try {
         const user = await User.findOne({ email: userEmail });
@@ -56,6 +57,7 @@ async function add(req, res) {
         if (!hasSchemaKeys) {
             const plantId = req.body.plantId;
             const plantDetails = await axios.get(`https://perenual.com/api/species/details/${plantId}?key=${process.env.PLANT_API_KEY}`);
+            console.log('plantDetails.data: ', plantDetails.data)
             const {
                 common_name,
                 cycle,
