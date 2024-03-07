@@ -1,10 +1,31 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import Box from '@mui/material/Box';
 
 function PlantDetail() {
   let location = useLocation();
-  const plant = location.state.plant;
+  const [plant, setPlant] = useState([])
+  const plantId = location.state.plant.id;
+  console.log('plant id is: ', plantId)
+  
+
+  //TODO: Figure out why this useEffect won't run
+  useEffect(() => {
+    console.log('useEffect triggered')
+    const fetchPlantData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/plants/details/${plantId}`);
+        setPlant(response.data);
+        console.log('RESPONSE.DATA: ', response.data)
+      } catch (error) {
+        console.error('Failed to fetch plant data:', error);
+      }
+    };
+    
+    fetchPlantData();
+  }, []);
 
   return (
     <div className='flex flex-col justify-center content-center items-center' style={{backgroundColor: '#cdc9c4'}}>
