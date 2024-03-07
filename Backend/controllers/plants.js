@@ -13,7 +13,6 @@ module.exports = {
 // Takes in user's email & zip code
 // or it takes in a plant name if a user searches by name
 
-//TODO: Add ability to search by plant name
 async function search(req, res) {
     try {
         if (req.body.q) {
