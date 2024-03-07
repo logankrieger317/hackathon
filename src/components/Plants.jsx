@@ -17,7 +17,9 @@ function Plants() {
   console.log(`user email in plants component: ${userEmail}`)
   const city = location.state.selectedCity;
   console.log(`city in plants component: ${city}`)
+
   const handleClick = (plant) => {
+    console.log('plant:', plant)
   navigate('/plant-details', { state: { plant } });
 }
 
@@ -93,6 +95,17 @@ function Plants() {
     setInOut(0);
   };
 
+  function handleFavorite(event, plantId) {
+    event.stopPropagation();
+    axios.post('http://localhost:3001/favorites/add', { plantId: plantId, email: userEmail })
+      .then(response => {
+        console.log('Plant added to favorites:', response.data.message);
+      })
+      .catch(error => {
+        console.error('Error adding plant to favorites:', error);
+      });
+  }
+
   useEffect(() => {
     const params = {
       params: {
@@ -111,7 +124,7 @@ function Plants() {
         console.error('that did not work:', error);
       });
     }, [inOut]);
-    console.log('plants in Plants.jsx:', plants);
+    console.log('PLANT LIST:', plants);
 
     
   return (
@@ -138,7 +151,7 @@ function Plants() {
             <h2 className='text-xl font-semibold'>{plant.name}</h2>
             <p className='text-gray-500 overflow-hidden overflow-ellipsis whitespace-nowrap'>{plant.description}</p>
           </div>
-          <IconButton className='absolute top-2 right-2 ' aria-label="add to favorites">
+          <IconButton className='absolute top-2 right-2 ' aria-label="add to favorites" onClick={(event) => handleFavorite(event, plant.id)}>
             <FavoriteBorderIcon fontSize="large" />
           </IconButton>
         </Box>
