@@ -19,7 +19,7 @@ function Plants() {
   console.log(`city in plants component: ${city}`)
 
   const handleClick = (plant) => {
-    console.log('plant:', plant)
+    console.log('plant in Plants.jsx:', plant)
   navigate('/plant-details', { state: { plant } });
 }
 
