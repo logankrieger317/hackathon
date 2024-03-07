@@ -11,10 +11,16 @@ module.exports = {
 
 // Returns list of plants based on search parameters
 // Takes in user's email & zip code
+// or it takes in a plant name if a user searches by name
 
 //TODO: Add ability to search by plant name
 async function search(req, res) {
     try {
+        if (req.body.q) {
+            const nameToSearchBy = req.body.q
+            const plantList = await axios.get(`https://perenual.com/api/species-list?key=${process.env.PLANT_API_KEY}&q=${nameToSearchBy}`)
+            res.json(plantList.data);
+        }
         const userEmail = req.body.email;
         let location = req.body.location;
         const user = await User.findOne({ email: userEmail });
