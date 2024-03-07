@@ -123,18 +123,16 @@ function LoginForm() {
 
 function SignupForm() {
   const navigate = useNavigate();
-  const { setUserEmail } = useUser();
-
+  
   // State for form data
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: ''
   });
-
-
-  // Handle input change
   
+  const { setUserEmail } = useUser();
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -147,9 +145,8 @@ function SignupForm() {
   e.preventDefault();
 
   try {
-    const response = await axios.post('http://localhost:3001/user/signup', formData);
-    console.log('response signup:', response.data);
-    const email = response.data.email
+    await axios.post('http://localhost:3001/user/signup', formData);
+    const email = formData.email
     setUserEmail(email)
     // redirect the user to the homepage
     navigate('/')
