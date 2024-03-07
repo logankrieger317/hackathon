@@ -131,15 +131,7 @@ function SignupForm() {
     email: '',
     password: ''
   });
-  // const [formData, setFormData] = useState({
-  //   firstName: '',
-  //   lastName: '',
-  //   email: '',
-  //   password: '',
-  //   city: '',
-  //   state: '',
-  //   zipCode: '' 
-  // });
+
 
   // Handle input change
   

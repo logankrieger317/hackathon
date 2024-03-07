@@ -5,18 +5,23 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import {useNavigate, useLocation} from 'react-router-dom';
+import { useUser } from './UserContext';
 import '../CSS/plants.css'
 
 function Plants() {
   let navigate = useNavigate();
   let location = useLocation();
+  const [inOut, setInOut] = useState(null)
+  const [plants, setPlants] = useState([]);
+  const { userEmail } = useUser();
+  console.log(`user email in plants component: ${userEmail}`)
   const city = location.state.selectedCity;
-
+  console.log(`city in plants component: ${city}`)
   const handleClick = (plant) => {
   navigate('/plant-details', { state: { plant } });
 }
 
-  const plants = [
+  const examplePlants = [
     {
       id: 1,
       imageUrl: 'https://via.placeholder.com/150',
@@ -72,27 +77,43 @@ function Plants() {
       thrivesIndoors:'Yes',
       thrivesOutdoors:'Yes',
       containerGrowing:'Yes',
-
+      
     },
   ];
+  
+  const handleAllClick = () => {
+    setInOut(null);
+  };
 
-//   const [plants, setPlants] = useState([]);
+  const handleIndoorClick = () => {
+    setInOut(1);
+  };
 
-//  useEffect(() => {
-//   // Fetch data from the backend and update the plants state
-//   axios.post('/api/plants/search', {
-//     email: 'userEmail', // replace with actual user email
-//     location: 'yourLocation',
-//     indoor: 1 // or 0 for outdoor
-//   })
-//   .then(response => {
-//     setPlants(response.data);
-//   })
-//   .catch(error => {
-//     console.error('that did not work:', error);
-//   });
-// }, []);
+  const handleOutdoorClick = () => {
+    setInOut(0);
+  };
 
+  useEffect(() => {
+    const params = {
+      params: {
+        email: userEmail,
+        location: city,
+        indoor: inOut
+      }
+    };
+  
+    const response = axios.get('http://localhost:3001/plants/search', params)
+      .then(response => {
+        console.log(`Response from /search: ${response.data.data}`)
+        setPlants(response.data.data);
+      })
+      .catch(error => {
+        console.error('that did not work:', error);
+      });
+    }, [inOut]);
+    console.log('plants in Plants.jsx:', plants);
+
+    
   return (
     <>
     <div className='Plants' style={{ backgroundColor: '#cdc9c4', padding:'10px' }} >
@@ -105,9 +126,9 @@ function Plants() {
   
     
       <div className='button-group flex justify-between items-center m-4'>
-      <Button variant="contained" className="plantBtn ">All</Button>
-      <Button variant="contained" className="plantBtn ">Indoor</Button>
-      <Button variant="contained" className="plantBtn ">Outdoor</Button>
+      <Button variant="contained" className="plantBtn" onClick={handleAllClick}>All</Button>
+      <Button variant="contained" className="plantBtn" onClick={handleIndoorClick}>Indoor</Button>
+      <Button variant="contained" className="plantBtn" onClick={handleOutdoorClick}>Outdoor</Button>
       </div>
       
         {plants.map((plant) => (
