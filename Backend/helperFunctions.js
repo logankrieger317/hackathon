@@ -25,7 +25,26 @@ async function getHardiness(userZip) {
     }
 }
 
+function getZipCode(cityName) {
+    const cities = {
+      'New York, NY': '10001',
+      'Austin, TX': '73301',
+      'Chicago, IL': '60601',
+      'San Francisco, CA': '94101',
+      'Seattle, WA': '98101',
+      'Los Angeles, CA': '90001',
+      'Boston, MA': '02101',
+      'Portland, OR': '97201',
+      'Denver, CO': '80201',
+      'Dallas, TX': '75201'
+    };
+  
+    return cities[cityName] || null; // Return the zip code or null if city name is not found
+  }
+  
+
 module.exports = {
     removeLetter,
-    getHardiness
+    getHardiness,
+    getZipCode
 };

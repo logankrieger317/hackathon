@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const axios = require('axios');
-const { getHardiness } = require('../helperFunctions');
+const { getHardiness, getZipCode } = require('../helperFunctions');
 
 module.exports = {
     search,
@@ -15,34 +15,35 @@ module.exports = {
 
 async function search(req, res) {
     try {
-        if (req.body.q) {
-            const nameToSearchBy = req.body.q
+        if (req.query.q) {
+            const nameToSearchBy = req.query.q
             const plantList = await axios.get(`https://perenual.com/api/species-list?key=${process.env.PLANT_API_KEY}&q=${nameToSearchBy}`)
             res.json(plantList.data);
         }
-        const userEmail = req.body.email;
-        let location = req.body.location;
+        const userEmail = req.query.email;
+        let city = req.query.location;
+        const zipCode = getZipCode(city)
         const user = await User.findOne({ email: userEmail });
         // find user by email
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-        if (!location && !user.location) {
+        if (!zipCode && !user.location) {
             return res.status(400).json({ error: "Please Select a Location" });
         }
 
         let tempHardiness = null;
         if (!user.location) {
             // if user doesn't have a location yet, we create it here
-            await User.findOneAndUpdate({ email: userEmail }, { location: location });
-        } else if (location && location !== user.location) {
+            await User.findOneAndUpdate({ email: userEmail }, { location: zipCode });
+        } else if (zipCode && zipCode !== user.location) {
             // if user has a location but is searching plants in a different location
-            tempHardiness = await getHardiness(location);
+            tempHardiness = await getHardiness(zipCode);
         }
 
         // Convert ZIP to hardiness zone number if user doesn't have one
         if (!user.hardiness) {
-            const hardiness = await getHardiness(userZip);
+            const hardiness = await getHardiness(zipCode);
             await User.findOneAndUpdate({ email: userEmail }, { hardiness: hardiness });
         } else {
         }
@@ -55,7 +56,7 @@ async function search(req, res) {
         apiUrl += `&hardiness=${hardinessToUse}`;
                 
         // Check if indoor/outdoor/both
-        const inOut = req.body.indoor;
+        const inOut = req.query.indoor;
         
         if (inOut === 1) {
             apiUrl += `&indoor=${inOut}`;

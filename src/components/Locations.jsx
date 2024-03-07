@@ -6,7 +6,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 function Locations() {
   const [selectedCity, setSelectedCity] = useState(null);
-  const [hardinessZone, setHardinessZone] = useState(null); // Replace with actual state
 
   let location = useLocation();
   let navigate = useNavigate();
@@ -23,7 +22,7 @@ function Locations() {
   }
 
   const handleClick = () => {
-    navigate('/plants', { state: { selectedCity, hardinessZone } });
+    navigate('/plants', { state: { selectedCity } });
   }
 
   return (
