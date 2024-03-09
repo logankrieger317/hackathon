@@ -168,6 +168,7 @@ function Plants() {
             variant="outlined"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ backgroundColor: 'white', borderRadius: '8px' }}
           />
           <Button variant="contained" onClick={handleSearch}>Search</Button>
         </div>

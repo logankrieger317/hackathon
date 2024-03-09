@@ -10,6 +10,7 @@ module.exports = {
 
 async function signup(req, res) {
     try {
+        console.log('REQ.BODY IN CONTRILLER:', req.body)
         const { name, email, password } = req.body;
         // check if the user already exists in the database
         const foundEmail = await User.findOne({ email: email });

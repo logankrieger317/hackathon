@@ -72,7 +72,7 @@ async function search(req, res) {
             page = 70;
             apiUrl += `&indoor=${inOut}`;
         }
-
+        
         const plantList = await axios.get(apiUrl);
         res.json(plantList.data);
     } catch (err) {
@@ -93,6 +93,7 @@ async function details(req, res) {
         const plantDetails = await axios.get(`https://perenual.com/api/species/details/${plantId}?key=${process.env.PLANT_API_KEY}`);
         console.log(`plantDetails is: ${plantDetails.data}`)
         //TODO: ADD A CALL FOR PLANT CARE INFO
+        console.log(plantDetails.data)
         res.json(plantDetails.data);
     } catch (err) {
         console.error('Error fetching plant details:', err);
