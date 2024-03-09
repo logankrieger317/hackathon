@@ -50,19 +50,21 @@ function LoginForm() {
     })
   };
   console.log(formData);
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
-        const response = await axios.post('http://localhost:3001/user/login', formData)
-        // after successfull api call, store the user's email in state
-        const email = response.data.user.email
-        setUserEmail(email)
-        // redirect the user to the homepage
-        navigate('/')
+      console.log('try block hit');
+      const response = await axios.post('http://localhost:3001/user/login', formData)
+      // after successfull api call, store the user's email in state
+      const email = response.data.user.email
+      console.log('response.data', response.data);
+      setUserEmail(email)
+      // redirect the user to the homepage
+      navigate('/')
     } catch (err){
-        console.error(err)
+        console.log('FORMDATA IN LOGIN.JSX', formData);
+        console.error('Error In Login Component', err)
     }
   }
 
