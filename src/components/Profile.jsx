@@ -9,6 +9,9 @@ function Profile() {
     <Link to="/editprofile" className="text-blue-500 underline"> 
       <p>Edit Profile</p>
     </Link>
+    <Link to="/favorites" className="text-blue-500 underline"> 
+      <p>View My Favorites</p>
+    </Link>
 
     </>
 
