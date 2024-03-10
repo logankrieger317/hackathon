@@ -36,7 +36,7 @@ async function editProfile(req, res) {
         // const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
         // const userUID = decodedToken.uid;
         // const user = await User.findOne({ uid: userUID });
-
+        console.log('req.body =>', req.body)
         const { oldEmail, email, name, location, password } = req.body;
 
         // find user by old email

@@ -17,7 +17,8 @@ async function index(req, res) {
         // const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
         // const userUID = decodedToken.uid;
         // const user = await User.findOne({ uid: userUID});
-        const userEmail = req.body.email;
+        console.log('REQ.query IN /FAV =>', req.query)
+        const userEmail = req.query.userEmail;
         const user = await User.findOne({ email: userEmail });
         if (!user) {
             return res.status(404).json({ error: "User not found" });
