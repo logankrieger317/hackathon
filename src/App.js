@@ -9,6 +9,7 @@ import Profile from './components/Profile';
 import Favorites from './components/Favorites';
 import Settings from './components/Settings';
 import Header from './components/Header';
+import EditProfile from './components/EditProfile';
 import { UserProvider } from './components/UserContext';
 import PlantDetail from './components/PlantDetail';
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/plants" element={<Plants/>} />
           <Route path="/plant-details" element={<PlantDetail />} />
           <Route path="/profile" element={<Profile/>} />
+          <Route path="/editprofile" element={<EditProfile/>} />
           <Route path="/favorites" element={<Favorites/>} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/" element={<Home />} />
