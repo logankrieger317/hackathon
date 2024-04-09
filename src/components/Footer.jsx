@@ -36,9 +36,9 @@ export default function Footer() {
             <Link to="/favorites"> 
               <BottomNavigationAction className='footer-icons' label="Favorites" icon={<FavoriteBorderOutlinedIcon />} />
             </Link>
-            <Link to="/settings"> 
+            {/* <Link to="/settings"> 
               <BottomNavigationAction className='footer-icons' label="Settings" icon={<SettingsOutlinedIcon />} />
-            </Link>
+            </Link> */}
           </BottomNavigation>
         </Box>
       </div>

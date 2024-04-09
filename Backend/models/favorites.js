@@ -5,6 +5,7 @@ const favoritesSchema = new Schema({
     plantName: String,
     plantId: Number,
     cycle: String,
+    plantImage: String,
     watering: String,
     sunlight: String,
     hardiness: Number,
