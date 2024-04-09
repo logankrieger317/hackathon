@@ -32,11 +32,6 @@ async function signup(req, res) {
 
 async function editProfile(req, res) {
     try {
-        // const { firebaseToken, name, email, location } = req.body;
-        // const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
-        // const userUID = decodedToken.uid;
-        // const user = await User.findOne({ uid: userUID });
-        console.log('req.body =>', req.body)
         const { oldEmail, email, name, location, password } = req.body;
 
         // find user by old email
@@ -55,16 +50,16 @@ async function editProfile(req, res) {
         }
 
         if (name) {
-            await User.findOneAndUpdate({ email: email }, { name: name });
+            user.name = name; // Update user's name field
         }
         if (location) {
-            await User.findOneAndUpdate({ email: email }, { location: location });
+            user.location = location; // Update user's location field
         }
         if (password) {
-            await User.findOneAndUpdate({ email: email }, { password: password });
+            user.password = password; // Update user's password field
         }
 
-        await user.save();
+        await user.save(); // Save the user object with updated fields
 
         res.status(200).json({ message: "Profile updated successfully" });
     } catch (err) {
@@ -72,6 +67,50 @@ async function editProfile(req, res) {
         res.status(500).json({ error: "Internal server error" });
     }
 }
+
+
+// async function editProfile(req, res) {
+//     try {
+//         // const { firebaseToken, name, email, location } = req.body;
+//         // const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
+//         // const userUID = decodedToken.uid;
+//         // const user = await User.findOne({ uid: userUID });
+//         console.log('req.body =>', req.body)
+//         const { oldEmail, email, name, location, password } = req.body;
+
+//         // find user by old email
+//         const user = await User.findOne({ email: oldEmail });
+
+//         if (!user) {
+//             return res.status(404).json({ error: "User not found" });
+//         }
+
+//         if (email && email !== oldEmail) {
+//             const emailExists = await User.findOne({ email: email });
+//             if (emailExists) {
+//                 return res.status(409).json({ error: "Email already in use" });
+//             }
+//             await User.findOneAndUpdate({ email: oldEmail }, { email: email });
+//         }
+
+//         if (name) {
+//             await User.findOneAndUpdate({ email: email }, { name: name });
+//         }
+//         if (location) {
+//             await User.findOneAndUpdate({ email: email }, { location: location });
+//         }
+//         if (password) {
+//             await User.findOneAndUpdate({ email: email }, { password: password });
+//         }
+
+//         await user.save();
+
+//         res.status(200).json({ message: "Profile updated successfully" });
+//     } catch (err) {
+//         console.error("Error editing user profile:", err);
+//         res.status(500).json({ error: "Internal server error" });
+//     }
+// }
 
 //pass users email and password in request body
 async function login(req, res) {

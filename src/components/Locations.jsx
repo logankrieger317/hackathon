@@ -22,6 +22,7 @@ function Locations() {
   }
 
   const handleClick = () => {
+    // TODO: updateUserLocation(selectedCity)
     navigate('/plants', { state: { selectedCity } });
   }
 
