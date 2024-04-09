@@ -19,7 +19,7 @@ function Plants() {
   const [favoritedPlants, setFavoritedPlants] = useState([]);
   const { user } = useUser();
   console.log(`user email in plants component: ${user.email}`)
-  const city = location.state.selectedCity;
+  const city = location.state?.selectedCity || user.location;
   console.log(`city in plants component: ${city}`)
 
   const handleClick = (plant) => {
