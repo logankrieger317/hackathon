@@ -8,6 +8,7 @@ import {useNavigate, useLocation} from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import { useUser } from './UserContext';
 import '../CSS/plants.css'
+import { ColorizeSharp } from '@mui/icons-material';
 
 function Plants() {
   let navigate = useNavigate();
@@ -119,16 +120,9 @@ function Plants() {
       });
   }
 
-  // function handleFavorite(event, plantId) {
-  //   event.stopPropagation();
-  //   axios.post('http://localhost:3001/favorites/add', { plantId: plantId, email: userEmail })
-  //     .then(response => {
-  //       console.log('Plant added to favorites:', response.data.message);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error adding plant to favorites:', error);
-  //     });
-  // }
+  function handleUnfavorite(event, plantId){
+    console.log('HANDLE UNFAVORITE')
+  }
 
   useEffect(() => {
     const params = {
@@ -147,8 +141,8 @@ function Plants() {
       .catch(error => {
         console.error('that did not work:', error);
       });
-    }, [inOut]);
-    console.log('PLANT LIST:', plants);
+  }, [inOut]);
+  console.log('PLANT LIST:', plants);
 
     
   return (
@@ -190,9 +184,18 @@ function Plants() {
             <p className='text-gray-500 overflow-hidden overflow-ellipsis whitespace-nowrap'>Watering: {plant.watering}</p>
             <p className='text-gray-500 overflow-hidden overflow-ellipsis whitespace-nowrap'>Sunlight: {plant.sunlight}</p>
           </div>
-          <IconButton className='absolute top-2 right-2 ' aria-label="add to favorites" onClick={(event) => handleFavorite(event, plant.id)}>
-            <FavoriteBorderIcon fontSize="large" style={{ color: favoritedPlants.includes(plant.id) ? 'red' : 'inherit' }} /> {/* Added style for changing color */}
-          </IconButton>
+          {/* <IconButton className='absolute top-2 right-2 ' aria-label="add to favorites" onClick={(event) => handleFavorite(event, plant.id)}> */}
+          {/* <IconButton className='absolute top-2 right-2 ' aria-label="add to favorites" onClick={color !== 'red' ? (event) => handleFavorite(event, plant.id) : (event) => handleUnfavorite(event, plant.id)}>
+            <FavoriteBorderIcon fontSize="large" style={{ color: favoritedPlants.includes(plant.id) ? 'red' : 'inherit' }} />
+          </IconButton> */}
+          <IconButton 
+    className='absolute top-2 right-2' 
+    aria-label="add to favorites" 
+    onClick={(event) => favoritedPlants.includes(plant.id) ? handleUnfavorite(event, plant.id) : handleFavorite(event, plant.id)}
+>
+    <FavoriteBorderIcon fontSize="large" style={{ color: favoritedPlants.includes(plant.id) ? 'red' : 'inherit' }} />
+</IconButton>
+
         </Box>
       ))}
     </div>

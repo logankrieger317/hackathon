@@ -68,6 +68,7 @@ async function add(req, res) {
                 maintenance,
                 indoor,
                 description,
+                default_image, //This will return an object, add ".small_url" to get the pic
                 // pruningInfo,
                 // wateringInfo,
                 // sunlightInfo
@@ -84,6 +85,7 @@ async function add(req, res) {
                 maintenance,
                 indoor,
                 description,
+                plantImage: default_image.small_url
                 // pruningInfo,
                 // wateringInfo,
                 // sunlightInfo

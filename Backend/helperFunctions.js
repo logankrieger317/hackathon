@@ -7,18 +7,32 @@ function removeLetter(hardinessZone) {
     return match ? parseInt(match[0]) : null;
 }
 
+// Todo: replace the API call with a hard coded obj like in the getZipCode function
 async function getHardiness(userZip) {
     try {
-        const response = await axios.get(`https://plant-hardiness-zone.p.rapidapi.com/zipcodes/${userZip}`, {
-            headers: {
-                'X-RapidAPI-Key': process.env.HARDINESS_API_KEY,
-                'X-RapidAPI-Host': 'plant-hardiness-zone.p.rapidapi.com'
-            }
-        });
+        // const response = await axios.get(`https://plant-hardiness-zone.p.rapidapi.com/zipcodes/${userZip}`, {
+        //     headers: {
+        //         'X-RapidAPI-Key': process.env.HARDINESS_API_KEY,
+        //         'X-RapidAPI-Host': 'plant-hardiness-zone.p.rapidapi.com'
+        //     }
+        // });
 
-        const hardinessNum = removeLetter(response.data.hardiness_zone);
+        // const hardinessNum = removeLetter(response.data.hardiness_zone);
+        // const hardinessNum = 7;
+        const hardiness = {
+            '10001': '7',
+            '73301': '8',
+            'Chicago, IL': '60601',
+            'San Francisco, CA': '94101',
+            'Seattle, WA': '98101',
+            'Los Angeles, CA': '90001',
+            'Boston, MA': '02101',
+            'Portland, OR': '97201',
+            'Denver, CO': '80201',
+            'Dallas, TX': '75201'
+          };
 
-        return hardinessNum;
+        return hardiness;
     } catch (error) {
         console.error('Error fetching hardiness:', error);
         throw error;

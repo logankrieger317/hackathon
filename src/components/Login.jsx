@@ -59,6 +59,11 @@ function LoginForm() {
       // after successfull api call, store the user's email in state
       const email = response.data.user.email
       console.log('response.data', response.data);
+      console.log('response.data.user !!!', response.data.user);
+      
+      //TODO: UPDATE TO INCLUDE THE ENTIRE USER OBJECT. THEN UPDATE EVERY PAGE THAT IS USING THE userEmail
+      // const userInfo = response.data.user
+      // setUserEmail(userInfo)
       setUserEmail(email)
       // redirect the user to the homepage
       navigate('/')
