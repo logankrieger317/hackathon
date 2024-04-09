@@ -16,8 +16,9 @@ function EditProfile() {
         password: ''
     });
     
-    const { userEmail } = useUser();
-    console.log('userEmail in EditProfile => ', userEmail)
+    const { user, updateUser } = useUser();
+    console.log('user data in EditProfile => ', user)
+    
     
     const handleChange = (e) => {
         setFormData({
@@ -32,9 +33,10 @@ function EditProfile() {
         try {
             const requestData = {
                 ...formData,
-                oldEmail: userEmail
+                oldEmail: user.email
             };
-            await axios.patch('http://localhost:3001/user/edit', requestData);
+            // await axios.patch('http://localhost:3001/user/edit', requestData);
+            await updateUser(requestData)
           // redirect the user to their profile page
             navigate('/profile')
         } catch (err) {

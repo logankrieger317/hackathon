@@ -41,7 +41,7 @@ function LoginForm() {
     password: ''
   });
 
-  const { setUserEmail } = useUser();
+  const { setUser } = useUser();
 
   const handleChange = (e) => {
     setFormData({
@@ -56,15 +56,11 @@ function LoginForm() {
     try {
       console.log('try block hit');
       const response = await axios.post('http://localhost:3001/user/login', formData)
-      // after successfull api call, store the user's email in state
-      const email = response.data.user.email
+      // after successfull api call, store the user's data in state
+      const user = response.data.user
       console.log('response.data', response.data);
-      console.log('response.data.user !!!', response.data.user);
-      
-      //TODO: UPDATE TO INCLUDE THE ENTIRE USER OBJECT. THEN UPDATE EVERY PAGE THAT IS USING THE userEmail
-      // const userInfo = response.data.user
-      // setUserEmail(userInfo)
-      setUserEmail(email)
+      console.log('userData !!!', user);
+      setUser(user)
       // redirect the user to the homepage
       navigate('/')
     } catch (err){
