@@ -17,14 +17,14 @@ function Plants() {
   const [plants, setPlants] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [favoritedPlants, setFavoritedPlants] = useState([]);
-  const { userEmail } = useUser();
-  console.log(`user email in plants component: ${userEmail}`)
+  const { user } = useUser();
+  console.log(`user email in plants component: ${user.email}`)
   const city = location.state.selectedCity;
   console.log(`city in plants component: ${city}`)
 
   const handleClick = (plant) => {
     console.log('plant in Plants.jsx:', plant)
-  navigate('/plant-details', { state: { plant } });
+    navigate('/plant-details', { state: { plant } });
 }
 
   const examplePlants = [
@@ -110,7 +110,7 @@ function Plants() {
 
   function handleFavorite(event, plantId) {
     event.stopPropagation();
-    axios.post('http://localhost:3001/favorites/add', { plantId: plantId, email: userEmail })
+    axios.post('http://localhost:3001/favorites/add', { plantId: plantId, email: user.email })
       .then(response => {
         console.log('Plant added to favorites:', response.data.message);
         setFavoritedPlants(prevState => [...prevState, plantId]); // Update favorited plants state
@@ -127,7 +127,7 @@ function Plants() {
   useEffect(() => {
     const params = {
       params: {
-        email: userEmail,
+        email: user.email,
         location: city,
         indoor: inOut
       }

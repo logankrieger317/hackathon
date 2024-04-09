@@ -9,13 +9,13 @@ import Box from '@mui/material/Box';
 
 function Favorites() {
   const [favorites, setFavorites] = useState([])
-  const { userEmail } = useUser();
+  const { user } = useUser();
 
-console.log('userEmail in Favs =>', userEmail)
+console.log('userEmail in Favs =>', user.email)
 useEffect(() => {
   axios.get('http://localhost:3001/favorites', {
     params: {
-      userEmail: userEmail
+      userEmail: user.email
     }
   })
   .then(response => {
