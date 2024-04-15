@@ -6,6 +6,7 @@ const axios = require('axios')
 module.exports = {
     index,
     add,
+    temp_add_function,
     unfavorite
 }
 
@@ -38,6 +39,29 @@ async function index(req, res) {
 }
 
 
+
+async function temp_add_function(req, res) {
+    console.log('req.body: ', req.body)
+    const userEmail = req.body.email;
+    try {
+        const user = await User.findOne({ email: userEmail });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const plantId = req.body.plantId;
+        
+        const newFavorite = new Favorite({ plantName: plantId });
+        const savedFavorite = await newFavorite.save();
+        user.favorites.push(savedFavorite);
+        await user.save();
+        return res.status(200).json({ message: "Object favorited successfully!" });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Failed to Favorite" });
+    }
+}
 
 // REQUIRED: Either plant details according to schema are passed into the body or the plantID is in the body
 async function add(req, res) {
@@ -111,19 +135,50 @@ async function add(req, res) {
 // Takes in user's email and plant's object ID (in request body)
 async function unfavorite(req, res) {
     const userEmail = req.body.email;
+    const { plantId } = req.body;
     try {
+        // Find the user
         const user = await User.findOne({ email: userEmail });
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-        const { plantId } = req.body;
-        user.favorites.pull(plantId);
+
+        // Find the favorite based on plantId and user's favorites
+        const favorite = await Favorite.findOne({ plantId: plantId, _id: { $in: user.favorites } });
+        if (!favorite) {
+            return res.status(404).json({ error: "Favorite not found" });
+        }
+
+        // Pull the favorite from the user's favorites array
+        user.favorites.pull(favorite._id);
         await user.save();
-        await Favorite.findByIdAndDelete(plantId);
+
+        // Delete the favorite document
+        await favorite.delete();
+
         return res.status(200).json({ message: "Plant unfavorited successfully" });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "Failed to unfavorite" });
     }
 }
+
+
+// async function unfavorite(req, res) {
+//     const userEmail = req.body.email;
+//     try {
+//         const user = await User.findOne({ email: userEmail });
+//         if (!user) {
+//             return res.status(404).json({ error: "User not found" });
+//         }
+//         const { plantId } = req.body;
+//         user.favorites.pull(plantId);
+//         await user.save();
+//         await Favorite.findByIdAndDelete(plantId);
+//         return res.status(200).json({ message: "Plant unfavorited successfully" });
+//     } catch (err) {
+//         console.error(err);
+//         return res.status(500).json({ message: "Failed to unfavorite" });
+//     }
+// }
 
