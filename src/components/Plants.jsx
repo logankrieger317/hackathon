@@ -16,77 +16,18 @@ function Plants() {
   const [inOut, setInOut] = useState(null)
   const [plants, setPlants] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [favoritedPlants, setFavoritedPlants] = useState([]);
   const { user } = useUser();
+  const [favoritedPlants, setFavoritedPlants] = useState(user.favorites || []);
   console.log(`user email in plants component: ${user.email}`)
   const city = location.state?.selectedCity || user.location;
   console.log(`city in plants component: ${city}`)
+  console.log('user.favorites in Plants.jsx', user.favorites)
 
   const handleClick = (plant) => {
     console.log('plant in Plants.jsx:', plant)
     navigate('/plant-details', { state: { plant } });
 }
 
-  const examplePlants = [
-    {
-      id: 1,
-      imageUrl: 'https://via.placeholder.com/150',
-      name: 'Plant 1',
-      scienceName: 'Scientific name 1',
-      tags: [' tag1 ', ' tag2 '],
-      description: 'This is a description for Plant 1',
-      cycle: 'Annual',
-      hardiness:'5-9',
-      watering:'1x per week',
-      sunlight:'Full Sun',
-      maintenanceLevel:'Easy',
-      droughtTolerant:'No',
-      invasiveSpecies:'No',
-      thrivesIndoors:'Yes',
-      thrivesOutdoors:'Yes',
-      containerGrowing:'Yes',
-
-    },
-    {
-      id: 2,
-      imageUrl: 'https://via.placeholder.com/150',
-      name: 'Plant 2',
-      scienceName: 'Scientific name 2',
-      tags: [' tag1 ', ' tag2 '],
-      description: 'This is a description for Plant 2 ',
-      cycle:'Perennial',
-      hardiness:'5-9',
-      watering:'1x per week',
-      sunlight:'Full Sun',
-      maintenanceLevel:'Easy',
-      droughtTolerant:'No',
-      invasiveSpecies:'No',
-      thrivesIndoors:'Yes',
-      thrivesOutdoors:'Yes',
-      containerGrowing:'Yes',
-
-    },
-    {
-      id: 3,
-      imageUrl: 'https://via.placeholder.com/150',
-      name: 'Plant 3',
-      scienceName: 'Scientific name 3',
-      tags: [' tag1 ', ' tag2 '],
-      description: 'This is a description for Plant 3',
-      cycle:'annual',
-      hardiness:'5-9',
-      watering:'1x per week',
-      sunlight:'Full Sun',
-      maintenanceLevel:'Easy',
-      droughtTolerant:'No',
-      invasiveSpecies:'No',
-      thrivesIndoors:'Yes',
-      thrivesOutdoors:'Yes',
-      containerGrowing:'Yes',
-      
-    },
-  ];
-  
   const handleAllClick = () => {
     setInOut(null);
   };
@@ -120,11 +61,38 @@ function Plants() {
       });
   }
 
-  function handleUnfavorite(event, plantId){
+  function handleUnfavorite(event, plantId) {
+    event.stopPropagation();
     console.log('HANDLE UNFAVORITE')
-  }
+    axios.delete('http://localhost:3001/favorites/unfavorite', { data: { plantId: plantId, email: user.email } })
+        .then(response => {
+            console.log('Plant removed from favorites:', response.data.message);
+            setFavoritedPlants(prevState => prevState.filter(id => id !== plantId)); 
+        })
+        .catch(error => {
+            console.error('Error removing plant from favorites:', error);
+        });
+}
+
+
+  // function handleUnfavorite(event, plantId){
+  //   event.stopPropagation();
+  //   console.log('HANDLE UNFAVORITE')
+  //   axios.delete('http://localhost:3001/favorites/unfavorite', {
+  //     data: { plantId: plantId, email: user.email }
+  //   })
+  //   .then(response => {
+  //     console.log('Plant removed from favorites:', response.data.message);
+  //     setFavoritedPlants(prevState => prevState.filter(id => id !== plantId)); 
+  //   })
+  //   .catch(error => {
+  //     console.error('Error removing plant from favorites:', error);
+  //   });
+  // }
 
   useEffect(() => {
+    // setFavoritedPlants(prevState => [...prevState, user.favorites])
+    // console.log('favoritedPlants in Plants.jsx', favoritedPlants)
     const params = {
       params: {
         email: user.email,
@@ -189,12 +157,12 @@ function Plants() {
             <FavoriteBorderIcon fontSize="large" style={{ color: favoritedPlants.includes(plant.id) ? 'red' : 'inherit' }} />
           </IconButton> */}
           <IconButton 
-    className='absolute top-2 right-2' 
-    aria-label="add to favorites" 
-    onClick={(event) => favoritedPlants.includes(plant.id) ? handleUnfavorite(event, plant.id) : handleFavorite(event, plant.id)}
->
-    <FavoriteBorderIcon fontSize="large" style={{ color: favoritedPlants.includes(plant.id) ? 'red' : 'inherit' }} />
-</IconButton>
+            className='absolute top-2 right-2' 
+            aria-label="add to favorites" 
+            onClick={(event) => favoritedPlants.includes(plant.id) ? handleUnfavorite(event, plant.id) : handleFavorite(event, plant.id)}
+          >
+            <FavoriteBorderIcon fontSize="large" style={{ color: favoritedPlants.includes(plant.id) ? 'red' : 'inherit' }} />
+          </IconButton>
 
         </Box>
       ))}
